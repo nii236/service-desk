@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 )
 
@@ -24,32 +23,16 @@ type TicketRecord struct {
 	Closed        bool
 }
 
-type EmailRecord struct {
-	ProjectID int
-	To        string
-	From      string
-	Subject   string
-	Body      string
-}
-
 // CustomerService handles the interface between this system and the customer
 type CustomerService interface {
-	EmailSend(customerEmail string, subject string, body string)
-	EmailReceive(r io.Reader) *EmailRecord
-}
-
-type CommentRecord struct {
-	ProjectID int
-	TaskID    int
-	Responder string
-	Body      string
+	Send(customerEmail string, subject string, body string)
 }
 
 // TicketService handles the interface between this system and the ticketing system
 type TicketService interface {
 	TaskCreate(projectID int, body string) int
-	CommentSend(projectID int, taskID int, body string)
-	CommentReceive(r io.Reader) *CommentRecord
+	TaskClose(taskID int)
+	Send(projectID int, taskID int, body string)
 }
 
 // EmailReceiveHandler will handle emails received from SendGrid or equivalent
